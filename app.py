@@ -11,20 +11,22 @@ def index():
 
 @app.route('/recognize', methods=['Get'])
 def recognize_get():
+    print('in recognize get')
     return render_template('recognize.html')
 
 @app.route('/recognize', methods=['POST'])
 def recognize_post():
+    print(('in recognize_post'))
     pixels = request.form['pixels']
     pixels = pixels.split(',')
     img = np.array(pixels).astype(float).reshape(1, 25, 25, 1)
     print('before loading')
     
-    # model = keras.models.load_model('number.keras')
+    model = keras.models.load_model('number.keras')
 
 
-    # pred = np.argmax(model.predict(img), axis=-1)
-    # print(pred)
+    pred = np.argmax(model.predict(img), axis=-1)
+    print(pred)
     return render_template('recognize.html')
 
 if __name__ == '__main__':
