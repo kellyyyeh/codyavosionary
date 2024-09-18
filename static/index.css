@@ -15,6 +15,13 @@ html {
     top: 0;
 }
 
+.menu-box {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
 .box {
     display: flex;
     flex-direction: column;
