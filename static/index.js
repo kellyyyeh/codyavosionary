@@ -114,8 +114,34 @@ function getPixels() {
   return pixels
 }
 
+// function regAction() {
+//     let pixels = getPixels()
+//     document.getElementById('pixels').value = pixels
+//     document.getElementById("practice-form").submit()
+// }
+
 function regAction() {
-    let pixels = getPixels()
-    document.getElementById('pixels').value = pixels
-    document.getElementById("practice-form").submit()
+  let pixels = getPixels();
+  document.getElementById('pixels').value = pixels;
+
+  // Use Fetch API to send form data without reloading
+  const formData = new FormData(document.getElementById("practice-form"));
+
+  fetch('recognize', {
+      method: 'POST',
+      body: formData
+  })
+  .then(response => {
+      if (response.ok) {
+          return response.json(); // Or response.text(), depending on your server response
+      }
+      throw new Error('Network response was not ok.');
+  })
+  .then(data => {
+      // Handle success (e.g., update the UI)
+      console.log(data);
+  })
+  .catch(error => {
+      console.error('There was a problem with the fetch operation:', error);
+  });
 }
