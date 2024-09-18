@@ -102,11 +102,11 @@ function getPixels() {
   let pixels = []
 //25x25
   for (i=0; i < rawPixels.length; i += 8) {
-    _pixels.push(rawPixels[i + 3])
+    _pixels.push(rawPixels[i + 7])
   }
 
   for (i=0; i < _pixels.length; i += 800) {
-    for (j=0; j < 200; j += 4) {
+    for (j=0; j < 200; j += 8) {
       pixels.push(_pixels[i+j])
     }
   }
