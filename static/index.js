@@ -108,13 +108,11 @@ function drawCanvas() {
     context.closePath()
     context.stroke()
   }
-
-  displayQuadrants();
 }
 
-function displayQuadrants() {
-  const halfWidth = canvas.width / 2
-  const halfHeight = canvas.height / 2
+function splitAndDisplayQuadrants(grid) {
+  const halfWidth = grid.width / 2
+  const halfHeight = grid.height / 2
 
   // Get the image data for each quadrant
   const topLeftData = context.getImageData(0, 0, halfWidth, halfHeight)
@@ -164,6 +162,10 @@ function regAction() {
   let pixels = getPixels();
   document.getElementById('pixels').value = pixels;
 
+  // Display CNN
+  layer1 = splitAndDisplayQuadrants(canvas);
+  layer2 = splitAndDisplayQuadrants(layer1);
+  
   // Use Fetch API to send form data without reloading
   const formData = new FormData(document.getElementById("practice-form"));
 
