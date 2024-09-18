@@ -19,7 +19,7 @@ def recognize_get():
 def recognize_post():
     pixels = request.form['pixels']
     pixels = pixels.split(',')
-    img = np.array(pixels).astype(float).reshape(1, 50, 50, 1)
+    img = np.array(pixels).astype(float).reshape(1, 25, 25, 1)
     print('before loading')
 
     pred = np.argmax(model.predict(img), axis=-1)
