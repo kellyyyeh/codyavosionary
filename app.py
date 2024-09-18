@@ -7,6 +7,8 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
+    model = keras.models.load_model('number.keras')
+
     return render_template("index.html")
 
 @app.route('/recognize', methods=['Get'])
@@ -19,8 +21,6 @@ def recognize_post():
     pixels = pixels.split(',')
     img = np.array(pixels).astype(float).reshape(1, 50, 50, 1)
     print('before loading')
-
-    model = keras.models.load_model('number.keras')
 
     pred = np.argmax(model.predict(img), axis=-1)
     print(pred)
