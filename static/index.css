@@ -4,15 +4,36 @@ html {
     padding: 1rem;
 }
 
+.outer-container {
+    display: flex;
+    align-items: stretch; /* Align items at the top */
+    height: 100vh; /* Full height of the viewport */
+  }
+
 .main-container {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     padding: 40px;
-    position: absolute;
-    left: 0;
-    top: 0;
+    border-right: 2px solid #ccc; /* Add a right border */
+
+}
+
+.quadrant-container {
+    display: flex;
+    flex-direction: column; /* Stack quadrants vertically */
+    justify-content: center; /* Center align quadrants within their container */
+    align-items: flex-end; /* Right-align the quadrants */
+    margin-top: 50px; /* Add top margin */
+    margin-bottom: 50px; /* Add bottom margin */
+    margin-left: 100px;
+}
+
+.quadrant {
+    background-color: white;
+    border: 1px solid #000; /* Adds a border to each quadrant */
+    margin: 20px; /* Adds some space around each quadrant */
 }
 
 .menu-box {
