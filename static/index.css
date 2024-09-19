@@ -17,7 +17,6 @@ html {
     align-items: center;
     padding: 40px;
     border-right: 2px solid #ccc; /* Add a right border */
-
 }
 
 .quadrant-container {
@@ -31,32 +30,37 @@ html {
 }
 
 .layer1 {
-    background-color: white;
-    border: 1px solid #000; /* Adds a border to each quadrant */
+    background-color: #ffffff; /* Soft gray background */
+    border: 1px solid #ccc; /* Light border */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Soft shadow */
     margin: 20px; /* Adds some space around each quadrant */
 }
 
 .layer2-1 {
-    background-color: white;
-    border: 1px solid #000; /* Adds a border to each quadrant */
+    background-color: #ffffff; /* Soft gray background */
+    border: 1px solid #ccc; /* Light border */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Soft shadow */
     margin: 20px; /* Adds some space around each quadrant */
 }
 
 .layer2-2 {
-    background-color: white;
-    border: 1px solid #000; /* Adds a border to each quadrant */
+    background-color: #ffffff; /* Soft gray background */
+    border: 1px solid #ccc; /* Light border */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Soft shadow */
     margin: 20px; /* Adds some space around each quadrant */
 }
 
 .layer2-3 {
-    background-color: white;
-    border: 1px solid #000; /* Adds a border to each quadrant */
+    background-color: #ffffff; /* Soft gray background */
+    border: 1px solid #ccc; /* Light border */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Soft shadow */
     margin: 20px; /* Adds some space around each quadrant */
 }
 
 .layer2-4 {
-    background-color: white;
-    border: 1px solid #000; /* Adds a border to each quadrant */
+    background-color: #ffffff; /* Soft gray background */
+    border: 1px solid #ccc; /* Light border */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Soft shadow */
     margin: 20px; /* Adds some space around each quadrant */
 }
 
@@ -84,10 +88,28 @@ html {
 
 #canvas {
     background-color: white;
-    border: 1px solid gray;
+    border: 2px solid gray;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Soft shadow */
 }
 
 #result {
     background-color: white;
     border: 1px solid gray;
 }
+
+#prediction-output {
+    font-size: 2rem;
+    width: 300px;
+    height: 82px;
+    text-align: center;
+    background-color: #f9f6f6; /* Soft gray background */
+    border: 1px solid #ccc; /* Light border */
+    border-radius: 10px; /* Rounded corners */
+    padding: 1rem;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Soft shadow */
+    transition: background-color 0.3s; /* Smooth transition for hover effect */
+  }
+
+  /* #prediction-output:hover {
+    background-color: #d0d0d0;
+  } */

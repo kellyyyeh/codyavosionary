@@ -68,6 +68,8 @@ function addClick(x, y, dragging) {
 function clearCanvas() {
   context.clearRect(0, 0, 200, 200)
 
+  document.getElementById('prediction-output').innerText = '';
+
   const layer1Canvases = document.querySelectorAll('.layer1');
   layer1Canvases.forEach((canvas) => {
     const ctx = canvas.getContext("2d");
