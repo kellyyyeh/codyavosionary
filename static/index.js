@@ -87,6 +87,18 @@ function clearCanvas() {
     const ctx = canvas.getContext("2d");
     ctx.clearRect(0, 0, canvas.width, canvas.height)
   });
+
+  const layer23Canvases = document.querySelectorAll('.layer2-3');
+  layer23Canvases.forEach((canvas) => {
+    const ctx = canvas.getContext("2d");
+    ctx.clearRect(0, 0, canvas.width, canvas.height)
+  });
+
+  const layer24Canvases = document.querySelectorAll('.layer2-4');
+  layer24Canvases.forEach((canvas) => {
+    const ctx = canvas.getContext("2d");
+    ctx.clearRect(0, 0, canvas.width, canvas.height)
+  });
 }
 
 function resetCanvas() {
@@ -219,8 +231,9 @@ function regAction() {
   // layer1Canvases.forEach(layer1 => {
   //   splitAndDisplayQuadrants(layer1, '.layer2');
   // });
+  console.log(layer1Canvases.length)
   for (let i = 0; i < layer1Canvases.length; i++) {
-    splitAndDisplayQuadrants(layer1Canvases[i], `.layer2-${i}`);
+    splitAndDisplayQuadrants(layer1Canvases[i], `.layer2-${i + 1}`);
   }
 
   // Create a FormData object
