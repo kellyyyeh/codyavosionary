@@ -138,13 +138,13 @@ function getPixels() {
   let rawPixels = context.getImageData(0, 0, 200, 200).data
   let _pixels = []
   let pixels = []
-//25x25
-  for (i=0; i < rawPixels.length; i += 8) {
-    _pixels.push(rawPixels[i + 7])
+//50x50
+  for (i=0; i < rawPixels.length; i += 4) {
+    _pixels.push(rawPixels[i + 3])
   }
 
   for (i=0; i < _pixels.length; i += 800) {
-    for (j=0; j < 200; j += 8) {
+    for (j=0; j < 200; j += 4) {
       pixels.push(_pixels[i+j])
     }
   }

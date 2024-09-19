@@ -19,10 +19,10 @@ def recognize_post():
     print(('in recognize_post'))
     pixels = request.form['pixels']
     pixels = pixels.split(',')
-    img = np.array(pixels).astype(float).reshape(1, 25, 25, 1)
+    img = np.array(pixels).astype(float).reshape(1, 50, 50, 1)
     print('before loading')
     
-    model = keras.models.load_model('number.keras')
+    model = keras.models.load_model('numbers2.keras')
 
 
     pred = np.argmax(model.predict(img), axis=-1)
