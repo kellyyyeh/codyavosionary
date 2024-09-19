@@ -24,14 +24,7 @@ def recognize_post():
     pred = np.argmax(model.predict(img), axis=-1)
     print(f"Prediction Value: {pred[0]}")
 
-    if pred[0] == 3:
-        correct = 'yes'
-    else: 
-        correct = 'no'
-    print(correct)
-
-    # return render_template('recognize.html', pred=pred, correct=correct)
-    return jsonify(pred=pred[0].item(), correct=correct)
+    return jsonify(pred=pred[0].item())
 
 if __name__ == '__main__':
     app.run(debug=True)

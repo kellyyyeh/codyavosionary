@@ -11,7 +11,7 @@ function startCanvas() {
 
   context.strokeStyle = "#000000"
   context.lineJoin = "round"
-  context.lineWidth = 8
+  context.lineWidth = 20
 
   canvas.addEventListener("touchstart", function (e) {
     var touch = e.touches[0]
@@ -94,9 +94,7 @@ function resetCanvas() {
   clearCanvas()
 }
 
-function drawCanvas() {
-//   clearCanvas()
-  
+function drawCanvas() {  
   for(let i=0; i<clickX.length; i++) {
     context.beginPath()
     if (clickDrag[i] && i) {
@@ -110,9 +108,9 @@ function drawCanvas() {
   }
 }
 
-function splitAndDisplayQuadrants() {
-  const halfWidth = canvas.width / 2
-  const halfHeight = canvas.height / 2
+function splitAndDisplayQuadrants(cnvs) {
+  const halfWidth = cnvs.width / 2
+  const halfHeight = cnvs.height / 2
 
   // Get the image data for each quadrant
   const topLeftData = context.getImageData(0, 0, halfWidth, halfHeight)
@@ -136,6 +134,24 @@ function splitAndDisplayQuadrants() {
 // this is shrinking the image, but still grabbing the important parts of it
 function getPixels() {
   let rawPixels = context.getImageData(0, 0, 200, 200).data
+  let _pixels = []
+  let pixels = []
+//50x50
+  for (i=0; i < rawPixels.length; i += 4) {
+    _pixels.push(rawPixels[i + 3])
+  }
+
+  for (i=0; i < _pixels.length; i += 800) {
+    for (j=0; j < 200; j += 4) {
+      pixels.push(_pixels[i+j])
+    }
+  }
+
+  return pixels
+}
+
+function pixelate(cntxt) {
+  let rawPixels = cntxt.getImageData(0, 0, 200, 200).data
   let _pixels = []
   let pixels = []
 //50x50
@@ -195,10 +211,11 @@ function getPixels() {
 
 
 function regAction() {
-  let pixels = getPixels();
+  // let pixels = getPixels();
+  let pixels = pixelate(context);
   document.getElementById('pixels').value = pixels; // Still set the hidden input if needed
 
-  layer1 = splitAndDisplayQuadrants();
+  layer1 = splitAndDisplayQuadrants(canvas);
 
   // Create a FormData object
   const formData = new FormData(document.getElementById("practice-form"));
@@ -215,10 +232,9 @@ function regAction() {
       throw new Error('Network response was not ok.');
   })
   .then(data => {
-      // Update the UI with the prediction and correctness
-      console.log(data); // Log the response for debugging
-      document.getElementById('prediction-output').innerText = `Prediction: ${data.pred}, Correct: ${data.correct}`;
-  })
+      console.log(data);
+      document.getElementById('prediction-output').innerText = `Prediction: ${data.pred}`;
+    })
   .catch(error => {
       console.error('There was a problem with the fetch operation:', error);
   });

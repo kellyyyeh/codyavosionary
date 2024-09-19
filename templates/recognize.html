@@ -7,32 +7,19 @@
       <a href="/" class="button is-text">&lt; return to main menu</a>
     </div>
     <h1 class="title">Write any number:</h1>
-    <div>
+    <div style="padding: 1.5rem;">
       <canvas id="canvas" width="200" height="200"></canvas>
     </div>
-    <div style="padding: 1rem;">
-        <div id="prediction-output"></div>
-
-        <!-- <p>{{pred}}</p> -->
-        <!-- {% if correct %}
-            <p>got into first if</p>
-          {% if correct == 'yes' %}
-            <p style="font-size: 0.75rem;">correct! next question:</p>
-          {% else %}
-            <p style="font-size: 0.75rem;">incorrect! next question:</p>
-          {% endif %}
-        {% endif %} -->
-      </div>
     <div>
-      <form style="padding: 2rem;" id="practice-form" action="/recognize" method="POST">
+      <form style="padding: 1.5rem;" id="practice-form" action="/recognize" method="POST">
         <input id="pixels" name="pixels" type="hidden" />
         <input id="letter" name="letter" type="hidden" value="{{letter}}" />
         <button type="button" class="button is-success" onclick="regAction()">Recognize my Number</button>
         <button type="button" class="button is-info" onclick="resetCanvas()">Clear</button>
       </form>
     </div>
-    <div>
-      <canvas id="result" width="50" height="50"></canvas>
+    <div style="padding: 1rem;">
+      <div id="prediction-output"></div>
     </div>
   </div>
   <div class="quadrant-container" style="display: flex; flex-direction: column; justify-content: space-between;">
@@ -40,6 +27,7 @@
     <canvas id="top-right" width="100" height="100" class="quadrant"></canvas>
     <canvas id="bottom-left" width="100" height="100" class="quadrant"></canvas>
     <canvas id="bottom-right" width="100" height="100" class="quadrant"></canvas>
+
   </div>
 </div>
 
