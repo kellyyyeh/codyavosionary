@@ -68,23 +68,23 @@ function addClick(x, y, dragging) {
 function clearCanvas() {
   context.clearRect(0, 0, 200, 200)
 
-  // Get the quadrant canvases
-  const topLeft = document.getElementById("top-left");
-  const topRight = document.getElementById("top-right");
-  const bottomLeft = document.getElementById("bottom-left");
-  const bottomRight = document.getElementById("bottom-right");
+  const layer1Canvases = document.querySelectorAll('.layer1');
+  layer1Canvases.forEach((canvas) => {
+    const ctx = canvas.getContext("2d");
+    ctx.clearRect(0, 0, canvas.width, canvas.height)
+  });
 
-  // Get their contexts
-  const ctxTopLeft = topLeft.getContext("2d")
-  const ctxTopRight = topRight.getContext("2d")
-  const ctxBottomLeft = bottomLeft.getContext("2d")
-  const ctxBottomRight = bottomRight.getContext("2d")
+  const layer21Canvases = document.querySelectorAll('.layer2-1');
+  layer21Canvases.forEach((canvas) => {
+    const ctx = canvas.getContext("2d");
+    ctx.clearRect(0, 0, canvas.width, canvas.height)
+  });
 
-  // Clear each quadrant canvas
-  ctxTopLeft.clearRect(0, 0, topLeft.width, topLeft.height)
-  ctxTopRight.clearRect(0, 0, topRight.width, topRight.height)
-  ctxBottomLeft.clearRect(0, 0, bottomLeft.width, bottomLeft.height)
-  ctxBottomRight.clearRect(0, 0, bottomRight.width, bottomRight.height)
+  const layer22Canvases = document.querySelectorAll('.layer2-2');
+  layer22Canvases.forEach((canvas) => {
+    const ctx = canvas.getContext("2d");
+    ctx.clearRect(0, 0, canvas.width, canvas.height)
+  });
 }
 
 function resetCanvas() {
@@ -113,7 +113,6 @@ function splitAndDisplayQuadrants(cnvs, className) {
   const halfWidth = cnvs.width / 2;
   const halfHeight = cnvs.height / 2;
 
-  // Get the image data for each quadrant
   const imageData = [
     context.getImageData(0, 0, halfWidth, halfHeight), // Top-left
     context.getImageData(halfWidth, 0, halfWidth, halfHeight), // Top-right
@@ -121,10 +120,8 @@ function splitAndDisplayQuadrants(cnvs, className) {
     context.getImageData(halfWidth, halfHeight, halfWidth, halfHeight) // Bottom-right
   ];
 
-  // Get all canvases with the class 'quadrant'
   const quadrantCanvases = document.querySelectorAll(className);
 
-  // Loop through each quadrant canvas and put the corresponding image data
   quadrantCanvases.forEach((canvas, index) => {
     const ctx = canvas.getContext("2d");
     ctx.putImageData(imageData[index], 0, 0);
@@ -132,29 +129,6 @@ function splitAndDisplayQuadrants(cnvs, className) {
   
   return quadrantCanvases
 }
-
-// function splitAndDisplayQuadrants(cnvs) {
-//   const halfWidth = cnvs.width / 2
-//   const halfHeight = cnvs.height / 2
-
-//   // Get the image data for each quadrant
-//   const topLeftData = context.getImageData(0, 0, halfWidth, halfHeight)
-//   const topRightData = context.getImageData(halfWidth, 0, halfWidth, halfHeight)
-//   const bottomLeftData = context.getImageData(0, halfHeight, halfWidth, halfHeight)
-//   const bottomRightData = context.getImageData(halfWidth, halfHeight, halfWidth, halfHeight)
-
-
-//   const topLeftCanvas = document.getElementById("top-left").getContext("2d")
-//   const topRightCanvas = document.getElementById("top-right").getContext("2d")
-//   const bottomLeftCanvas = document.getElementById("bottom-left").getContext("2d")
-//   const bottomRightCanvas = document.getElementById("bottom-right").getContext("2d")
-
-//   // Draw the image data onto the respective canvases
-//   topLeftCanvas.putImageData(topLeftData, 0, 0)
-//   topRightCanvas.putImageData(topRightData, 0, 0)
-//   bottomLeftCanvas.putImageData(bottomLeftData, 0, 0)
-//   bottomRightCanvas.putImageData(bottomRightData, 0, 0)
-// }
 
 // this is shrinking the image, but still grabbing the important parts of it
 function getPixels() {
