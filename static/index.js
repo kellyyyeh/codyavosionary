@@ -152,12 +152,15 @@ function getPixels() {
   return pixels
 }
 
-function regAction() {
-    let pixels = getPixels()
-    document.getElementById('pixels').value = pixels
-    document.getElementById("practice-form").submit()
-}
+// refresh page
+// function regAction() {
+//     let pixels = getPixels()
+//     document.getElementById('pixels').value = pixels
+//     document.getElementById("practice-form").submit()
+// }
 
+
+// don't refresh page
 // function regAction() {
 //   let pixels = getPixels();
 //   document.getElementById('pixels').value = pixels;
@@ -189,3 +192,34 @@ function regAction() {
 //       console.error('There was a problem with the fetch operation:', error);
 //   });
 // }
+
+
+function regAction() {
+  let pixels = getPixels();
+  document.getElementById('pixels').value = pixels; // Still set the hidden input if needed
+
+  layer1 = splitAndDisplayQuadrants();
+
+  // Create a FormData object
+  const formData = new FormData(document.getElementById("practice-form"));
+
+  // Use Fetch API to send form data without reloading the page
+  fetch('/recognize', {
+      method: 'POST',
+      body: formData
+  })
+  .then(response => {
+      if (response.ok) {
+          return response.json(); // Parse JSON response
+      }
+      throw new Error('Network response was not ok.');
+  })
+  .then(data => {
+      // Update the UI with the prediction and correctness
+      console.log(data); // Log the response for debugging
+      document.getElementById('prediction-output').innerText = `Prediction: ${data.pred}, Correct: ${data.correct}`;
+  })
+  .catch(error => {
+      console.error('There was a problem with the fetch operation:', error);
+  });
+}

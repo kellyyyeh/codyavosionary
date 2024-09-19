@@ -1,5 +1,5 @@
 from flask import (
-    Flask, render_template, request, redirect, url_for, session)
+    Flask, render_template, request, redirect, url_for, session, jsonify)
 from tensorflow import keras
 import numpy as np
 
@@ -30,7 +30,8 @@ def recognize_post():
         correct = 'no'
     print(correct)
 
-    return render_template('recognize.html', pred=pred, correct=correct)
+    # return render_template('recognize.html', pred=pred, correct=correct)
+    return jsonify(pred=pred[0].item(), correct=correct)
 
 if __name__ == '__main__':
     app.run(debug=True)
