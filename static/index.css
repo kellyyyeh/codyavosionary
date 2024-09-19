@@ -30,7 +30,31 @@ html {
     margin-left: 100px;
 }
 
-.quadrant {
+.layer1 {
+    background-color: white;
+    border: 1px solid #000; /* Adds a border to each quadrant */
+    margin: 20px; /* Adds some space around each quadrant */
+}
+
+.layer2-1 {
+    background-color: white;
+    border: 1px solid #000; /* Adds a border to each quadrant */
+    margin: 20px; /* Adds some space around each quadrant */
+}
+
+.layer2-2 {
+    background-color: white;
+    border: 1px solid #000; /* Adds a border to each quadrant */
+    margin: 20px; /* Adds some space around each quadrant */
+}
+
+.layer2-3 {
+    background-color: white;
+    border: 1px solid #000; /* Adds a border to each quadrant */
+    margin: 20px; /* Adds some space around each quadrant */
+}
+
+.layer2-4 {
     background-color: white;
     border: 1px solid #000; /* Adds a border to each quadrant */
     margin: 20px; /* Adds some space around each quadrant */

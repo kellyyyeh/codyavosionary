@@ -108,28 +108,53 @@ function drawCanvas() {
   }
 }
 
-function splitAndDisplayQuadrants(cnvs) {
-  const halfWidth = cnvs.width / 2
-  const halfHeight = cnvs.height / 2
+function splitAndDisplayQuadrants(cnvs, className) {
+  const context = cnvs.getContext("2d");
+  const halfWidth = cnvs.width / 2;
+  const halfHeight = cnvs.height / 2;
 
   // Get the image data for each quadrant
-  const topLeftData = context.getImageData(0, 0, halfWidth, halfHeight)
-  const topRightData = context.getImageData(halfWidth, 0, halfWidth, halfHeight)
-  const bottomLeftData = context.getImageData(0, halfHeight, halfWidth, halfHeight)
-  const bottomRightData = context.getImageData(halfWidth, halfHeight, halfWidth, halfHeight)
+  const imageData = [
+    context.getImageData(0, 0, halfWidth, halfHeight), // Top-left
+    context.getImageData(halfWidth, 0, halfWidth, halfHeight), // Top-right
+    context.getImageData(0, halfHeight, halfWidth, halfHeight), // Bottom-left
+    context.getImageData(halfWidth, halfHeight, halfWidth, halfHeight) // Bottom-right
+  ];
 
-  // Get contexts for each quadrant canvas
-  const topLeftCanvas = document.getElementById("top-left").getContext("2d")
-  const topRightCanvas = document.getElementById("top-right").getContext("2d")
-  const bottomLeftCanvas = document.getElementById("bottom-left").getContext("2d")
-  const bottomRightCanvas = document.getElementById("bottom-right").getContext("2d")
+  // Get all canvases with the class 'quadrant'
+  const quadrantCanvases = document.querySelectorAll(className);
 
-  // Draw the image data onto the respective canvases
-  topLeftCanvas.putImageData(topLeftData, 0, 0)
-  topRightCanvas.putImageData(topRightData, 0, 0)
-  bottomLeftCanvas.putImageData(bottomLeftData, 0, 0)
-  bottomRightCanvas.putImageData(bottomRightData, 0, 0)
+  // Loop through each quadrant canvas and put the corresponding image data
+  quadrantCanvases.forEach((canvas, index) => {
+    const ctx = canvas.getContext("2d");
+    ctx.putImageData(imageData[index], 0, 0);
+  });
+  
+  return quadrantCanvases
 }
+
+// function splitAndDisplayQuadrants(cnvs) {
+//   const halfWidth = cnvs.width / 2
+//   const halfHeight = cnvs.height / 2
+
+//   // Get the image data for each quadrant
+//   const topLeftData = context.getImageData(0, 0, halfWidth, halfHeight)
+//   const topRightData = context.getImageData(halfWidth, 0, halfWidth, halfHeight)
+//   const bottomLeftData = context.getImageData(0, halfHeight, halfWidth, halfHeight)
+//   const bottomRightData = context.getImageData(halfWidth, halfHeight, halfWidth, halfHeight)
+
+
+//   const topLeftCanvas = document.getElementById("top-left").getContext("2d")
+//   const topRightCanvas = document.getElementById("top-right").getContext("2d")
+//   const bottomLeftCanvas = document.getElementById("bottom-left").getContext("2d")
+//   const bottomRightCanvas = document.getElementById("bottom-right").getContext("2d")
+
+//   // Draw the image data onto the respective canvases
+//   topLeftCanvas.putImageData(topLeftData, 0, 0)
+//   topRightCanvas.putImageData(topRightData, 0, 0)
+//   bottomLeftCanvas.putImageData(bottomLeftData, 0, 0)
+//   bottomRightCanvas.putImageData(bottomRightData, 0, 0)
+// }
 
 // this is shrinking the image, but still grabbing the important parts of it
 function getPixels() {
@@ -209,13 +234,18 @@ function pixelate(cntxt) {
 //   });
 // }
 
-
 function regAction() {
-  // let pixels = getPixels();
-  let pixels = pixelate(context);
+  let pixels = getPixels();
+  // let pixels = pixelate(context);
   document.getElementById('pixels').value = pixels; // Still set the hidden input if needed
 
-  layer1 = splitAndDisplayQuadrants(canvas);
+  layer1Canvases = splitAndDisplayQuadrants(canvas, '.layer1');
+  // layer1Canvases.forEach(layer1 => {
+  //   splitAndDisplayQuadrants(layer1, '.layer2');
+  // });
+  for (let i = 0; i < layer1Canvases.length; i++) {
+    splitAndDisplayQuadrants(layer1Canvases[i], `.layer2-${i}`);
+  }
 
   // Create a FormData object
   const formData = new FormData(document.getElementById("practice-form"));
