@@ -189,57 +189,51 @@ function pixelate(cntxt) {
 // }
 
 
-// don't refresh page
 // function regAction() {
 //   let pixels = getPixels();
-//   document.getElementById('pixels').value = pixels;
+//   // let pixels = pixelate(context);
+//   document.getElementById('pixels').value = pixels; // Still set the hidden input if needed
 
-//   // Display CNN
-//    layer1 = splitAndDisplayQuadrants();
-// //   layer2 = splitAndDisplayQuadrants(layer1);
-  
-//   // Use Fetch API to send form data without reloading
+//   layer1Canvases = splitAndDisplayQuadrants(canvas, '.layer1');
+//   // layer1Canvases.forEach(layer1 => {
+//   //   splitAndDisplayQuadrants(layer1, '.layer2');
+//   // });
+//   console.log(layer1Canvases.length)
+//   for (let i = 0; i < layer1Canvases.length; i++) {
+//     splitAndDisplayQuadrants(layer1Canvases[i], `.layer2-${i + 1}`);
+//   }
+
+//   // Create a FormData object
 //   const formData = new FormData(document.getElementById("practice-form"));
 
-//   console.log('inside regAction')
-
+//   // Use Fetch API to send form data without reloading the page
 //   fetch('/recognize', {
 //       method: 'POST',
 //       body: formData
 //   })
 //   .then(response => {
 //       if (response.ok) {
-//           return response.json(); // Or response.text(), depending on your server response
+//           return response.json(); // Parse JSON response
 //       }
 //       throw new Error('Network response was not ok.');
 //   })
 //   .then(data => {
-//       // Handle success (e.g., update the UI)
 //       console.log(data);
-//   })
+//       document.getElementById('prediction-output').innerText = `Prediction: ${data.pred}`;
+//     })
 //   .catch(error => {
 //       console.error('There was a problem with the fetch operation:', error);
 //   });
 // }
 
 function regAction() {
+  // Step 1: Collect pixel data from the canvas
   let pixels = getPixels();
-  // let pixels = pixelate(context);
-  document.getElementById('pixels').value = pixels; // Still set the hidden input if needed
+  document.getElementById('pixels').value = pixels; // Set the hidden input if needed
 
-  layer1Canvases = splitAndDisplayQuadrants(canvas, '.layer1');
-  // layer1Canvases.forEach(layer1 => {
-  //   splitAndDisplayQuadrants(layer1, '.layer2');
-  // });
-  console.log(layer1Canvases.length)
-  for (let i = 0; i < layer1Canvases.length; i++) {
-    splitAndDisplayQuadrants(layer1Canvases[i], `.layer2-${i + 1}`);
-  }
-
-  // Create a FormData object
+  // Step 3: Create a FormData object and send it to the server
   const formData = new FormData(document.getElementById("practice-form"));
 
-  // Use Fetch API to send form data without reloading the page
   fetch('/recognize', {
       method: 'POST',
       body: formData
@@ -251,10 +245,28 @@ function regAction() {
       throw new Error('Network response was not ok.');
   })
   .then(data => {
-      console.log(data);
-      document.getElementById('prediction-output').innerText = `Prediction: ${data.pred}`;
-    })
+      // Step 4: Display the prediction and feature maps
+      displayPrediction(data.pred, data.images);
+  })
   .catch(error => {
       console.error('There was a problem with the fetch operation:', error);
+  });
+}
+
+// Helper function to display the prediction and feature maps in #prediction-output
+function displayPrediction(prediction, images) {
+  const outputDiv = document.getElementById('prediction-output');
+
+  // Clear previous content
+  outputDiv.innerHTML = `<h2>Prediction: ${prediction}</h2>`;
+
+  // Display each feature map image
+  images.forEach((imgBase64, index) => {
+    const imgElement = document.createElement('img');
+    imgElement.src = `data:image/png;base64,${imgBase64}`;
+    imgElement.alt = `Feature Map ${index + 1}`;
+    imgElement.style.margin = '10px';
+    imgElement.style.border = '1px solid #ddd';
+    outputDiv.appendChild(imgElement);
   });
 }
