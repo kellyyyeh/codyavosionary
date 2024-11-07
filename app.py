@@ -56,32 +56,54 @@ def recognize_post():
         print(feature_map.shape)
 
     processed = []
+    print(outputs[0].shape)
     for feature_map in outputs:
-        feature_map = tf.squeeze(feature_map, axis=0)  # Remove batch dimension
-        gray_scale = tf.reduce_sum(feature_map, axis=-1)  # Sum across channels to make it grayscale
-        gray_scale /= tf.cast(feature_map.shape[-1], tf.float32)  # Normalize by the number of channels
-        processed.append(gray_scale.numpy())  # Convert to NumPy array
-        print('finished squeeze')
-    
+        feature_map = tf.squeeze(feature_map, axis=0)  # Remove the batch dimension (shape now: (height, width, num_filters))
+        num_filters = feature_map.shape[-1]  # Get the number of filters
+
+        for j in range(num_filters):  # Iterate over each filter
+            single_filter_map = feature_map[:, :, j].numpy()  # Convert to NumPy array for visualization
+            processed.append(single_filter_map)
+
+    # Visualize and save each processed feature map
     processed_images = []
     for i, fm in enumerate(processed):
-    # Create a new figure for each feature map
-        fig, ax = plt.subplots(figsize=(6, 6))  # Adjust the size as needed
-        ax.imshow(fm, cmap='viridis')  # Display the feature map
-        ax.axis("off")  # Hide the axes for a cleaner look
-        ax.set_title(names[i].split('(')[0], fontsize=12)  # Set a smaller title for individual plots
+        fig, ax = plt.subplots(figsize=(4, 4))
+        ax.imshow(fm, cmap='viridis')
+        ax.axis("off")
+        ax.set_title(f'Feature Map {i}', fontsize=10)
 
-        # Save the figure to a BytesIO buffer
         buf = io.BytesIO()
-        plt.savefig(buf, format='png', bbox_inches='tight')  # Save the plot to the buffer
-        plt.close(fig)  # Close the figure to free up memory
-        buf.seek(0)  # Rewind the buffer to the beginning
+        fig.savefig(buf, format='png', bbox_inches='tight')
+        plt.close(fig)
+        buf.seek(0)
 
-        # Convert the buffer to a base64 string and store it
         img_base64 = base64.b64encode(buf.getvalue()).decode('utf-8')
         processed_images.append(img_base64)
-    for fm in processed:
-        print(fm.shape)
+    # for feature_map in outputs:
+    #     feature_map = tf.squeeze(feature_map, axis=0)  # Remove batch dimension
+    #     gray_scale = tf.reduce_sum(feature_map, axis=-1)  # Sum across channels to make it grayscale
+    #     gray_scale /= tf.cast(feature_map.shape[-1], tf.float32)  # Normalize by the number of channels
+    #     processed.append(gray_scale.numpy())  # Convert to NumPy array
+    #     print('finished squeeze')
+    
+    # processed_images = []
+    # for i, fm in enumerate(processed):
+    #     print(f"Feature map shape for layer {i}: {fm.shape}")  # Add this line for debugging
+    # for i, fm in enumerate(processed):  # Loop over each feature map tensor in `processed`
+    #     # `fm` should have a shape like (height, width, num_filters)
+    #     fig, ax = plt.subplots(figsize=(4, 4))
+    #     ax.imshow(fm, cmap='viridis')
+    #     ax.axis("off")
+    #     ax.set_title(f'Layer {i}', fontsize=10)
+
+    #     buf = io.BytesIO()
+    #     fig.savefig(buf, format='png', bbox_inches='tight')
+    #     plt.close(fig)
+    #     buf.seek(0)
+
+    #     img_base64 = base64.b64encode(buf.getvalue()).decode('utf-8')
+    #     processed_images.append(img_base64)
 
     # Return JSON with prediction and images
     print('made into json package time')
