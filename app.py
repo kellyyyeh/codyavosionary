@@ -34,93 +34,104 @@ def recognize_post():
     pred = np.argmax(__, axis=-1)
     print(f"Prediction Value: {pred[0]}")
 
-    # Extract feature maps from each convolutional layer
-    # conv_layers = [layer for layer in model.layers if isinstance(layer, keras.layers.Conv2D)]
-    conv_layers = []
-    model_weights = []
-    counter = 0
-
-    # Call the function on each top-level layer
-    for layer in model.layers:
-        get_conv_layers_and_weights(layer, conv_layers, model_weights)
-
+    layers_list = []
+    weights_list = []
+    names_list = []
     outputs = []
-    names = []
-    for layer in conv_layers:
-        image = layer(image)
-        outputs.append(image)
-        names.append(str(layer))
-    print(len(outputs))
-    #print feature_maps
-    for feature_map in outputs:
-        print(feature_map.shape)
+    labels = []
 
-    processed = []
-    print(outputs[0].shape)
-    for feature_map in outputs:
-        feature_map = tf.squeeze(feature_map, axis=0)  # Remove the batch dimension (shape now: (height, width, num_filters))
-        num_filters = feature_map.shape[-1]  # Get the number of filters
+    # Get all layers and their names
+    for layer in model.layers:
+        get_layers(layer, layers_list, weights_list, names_list)
 
-        for j in range(num_filters):  # Iterate over each filter
-            single_filter_map = feature_map[:, :, j].numpy()  # Convert to NumPy array for visualization
-            processed.append(single_filter_map)
-
-    # Visualize and save each processed feature map
+    # Keep track of current layer output
+    current_output = image
+    
+    # Process each layer and collect outputs
+    for i, layer in enumerate(layers_list):
+        if isinstance(layer, (layers.Conv2D, layers.MaxPooling2D, layers.Dropout)):
+            # Process the current layer with the previous layer's output
+            current_output = layer(current_output, training=False)  # Set training=False for consistent results
+            outputs.append(current_output)
+            labels.append(names_list[i])
+        
+        elif isinstance(layer, layers.Flatten):
+            current_output = layer(current_output)
+            outputs.append(current_output)
+            labels.append("Flatten")
+    
+    # Process and visualize feature maps
     processed_images = []
-    for i, fm in enumerate(processed):
-        fig, ax = plt.subplots(figsize=(4, 4))
-        ax.imshow(fm, cmap='viridis')
-        ax.axis("off")
-        ax.set_title(f'Feature Map {i}', fontsize=10)
-
+    
+    for i, feature_map in enumerate(outputs):
+        if len(feature_map.shape) == 2:  # Flattened output
+            single_filter_map = feature_map.numpy()
+            fig, ax = plt.subplots(figsize=(4, 4))
+            ax.bar(np.arange(len(single_filter_map[0])), single_filter_map[0])
+            ax.set_xlabel('Index')
+            ax.set_ylabel('Value')
+            ax.set_title(f'{labels[i]} - Flattened Layer')
+        
+        else:  # Feature maps from Conv2D or MaxPooling2D
+            feature_map = tf.squeeze(feature_map, axis=0)  # Remove batch dimension
+            num_filters = feature_map.shape[-1]
+            
+            # Calculate grid size
+            grid_size = int(np.ceil(np.sqrt(num_filters)))
+            fig, axes = plt.subplots(grid_size, grid_size, figsize=(12, 12))
+            
+            # Make axes 2D if it isn't already
+            if num_filters == 1:
+                axes = np.array([[axes]])
+            elif grid_size == 1:
+                axes = np.array([axes])
+            
+            # Plot each filter
+            for filter_idx in range(num_filters):
+                row = filter_idx // grid_size
+                col = filter_idx % grid_size
+                single_filter_map = feature_map[:, :, filter_idx].numpy()
+                axes[row, col].imshow(single_filter_map, cmap='viridis')
+                axes[row, col].axis('off')
+            
+            # Turn off empty subplots
+            for j in range(num_filters, grid_size * grid_size):
+                row = j // grid_size
+                col = j % grid_size
+                axes[row, col].axis('off')
+            
+            plt.suptitle(f'{labels[i]} - Feature Maps')
+        
+        # Save the figure
         buf = io.BytesIO()
+        plt.tight_layout()
         fig.savefig(buf, format='png', bbox_inches='tight')
         plt.close(fig)
         buf.seek(0)
-
+        
         img_base64 = base64.b64encode(buf.getvalue()).decode('utf-8')
         processed_images.append(img_base64)
-    # for feature_map in outputs:
-    #     feature_map = tf.squeeze(feature_map, axis=0)  # Remove batch dimension
-    #     gray_scale = tf.reduce_sum(feature_map, axis=-1)  # Sum across channels to make it grayscale
-    #     gray_scale /= tf.cast(feature_map.shape[-1], tf.float32)  # Normalize by the number of channels
-    #     processed.append(gray_scale.numpy())  # Convert to NumPy array
-    #     print('finished squeeze')
-    
-    # processed_images = []
-    # for i, fm in enumerate(processed):
-    #     print(f"Feature map shape for layer {i}: {fm.shape}")  # Add this line for debugging
-    # for i, fm in enumerate(processed):  # Loop over each feature map tensor in `processed`
-    #     # `fm` should have a shape like (height, width, num_filters)
-    #     fig, ax = plt.subplots(figsize=(4, 4))
-    #     ax.imshow(fm, cmap='viridis')
-    #     ax.axis("off")
-    #     ax.set_title(f'Layer {i}', fontsize=10)
 
-    #     buf = io.BytesIO()
-    #     fig.savefig(buf, format='png', bbox_inches='tight')
-    #     plt.close(fig)
-    #     buf.seek(0)
-
-    #     img_base64 = base64.b64encode(buf.getvalue()).decode('utf-8')
-    #     processed_images.append(img_base64)
-
-    # Return JSON with prediction and images
-    print('made into json package time')
     return jsonify(pred=pred[0].item(), images=processed_images)
 
 
-    # return jsonify(pred=pred[0].item())
-
-def get_conv_layers_and_weights(layer, conv_layers, model_weights):
-    # Check if the layer is a Conv2D layer
+def get_layers(layer, layers_list, weights_list, names_list):
     if isinstance(layer, layers.Conv2D):
-        model_weights.append(layer.get_weights())
-        conv_layers.append(layer)
-    # If the layer contains sub-layers (e.g., Sequential), recursively check them
+        layers_list.append(layer)
+        weights_list.append(layer.get_weights())
+        names_list.append(f"Conv2D_{layer.name}")
+    elif isinstance(layer, layers.MaxPooling2D):
+        layers_list.append(layer)
+        names_list.append(f"MaxPool_{layer.name}")
+    elif isinstance(layer, layers.Dropout):
+        layers_list.append(layer)
+        names_list.append(f"Dropout_{layer.name}")
+    elif isinstance(layer, layers.Dense):
+        layers_list.append(layer)
+        names_list.append(f"Dense_{layer.name}")
     elif hasattr(layer, 'layers'):
         for sub_layer in layer.layers:
-            get_conv_layers_and_weights(sub_layer, conv_layers, model_weights)
-
+            get_layers(sub_layer, layers_list, weights_list, names_list)
+            
 if __name__ == '__main__':
     app.run(debug=True)
