@@ -10,58 +10,14 @@ html {
     height: 100vh; /* Full height of the viewport */
   }
 
-.main-container {
+.drawing-pad {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     padding: 40px;
-    border-right: 2px solid #ccc; /* Add a right border */
-}
-
-.quadrant-container {
-    display: flex;
-    flex-direction: column; /* Stack quadrants vertically */
-    justify-content: center; /* Center align quadrants within their container */
-    align-items: flex-end; /* Right-align the quadrants */
-    margin-top: 50px; /* Add top margin */
-    margin-bottom: 50px; /* Add bottom margin */
-    margin-left: 100px;
-}
-
-.layer1 {
-    background-color: #ffffff; /* Soft gray background */
-    border: 1px solid #ccc; /* Light border */
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Soft shadow */
-    margin: 20px; /* Adds some space around each quadrant */
-}
-
-.layer2-1 {
-    background-color: #ffffff; /* Soft gray background */
-    border: 1px solid #ccc; /* Light border */
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Soft shadow */
-    margin: 20px; /* Adds some space around each quadrant */
-}
-
-.layer2-2 {
-    background-color: #ffffff; /* Soft gray background */
-    border: 1px solid #ccc; /* Light border */
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Soft shadow */
-    margin: 20px; /* Adds some space around each quadrant */
-}
-
-.layer2-3 {
-    background-color: #ffffff; /* Soft gray background */
-    border: 1px solid #ccc; /* Light border */
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Soft shadow */
-    margin: 20px; /* Adds some space around each quadrant */
-}
-
-.layer2-4 {
-    background-color: #ffffff; /* Soft gray background */
-    border: 1px solid #ccc; /* Light border */
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Soft shadow */
-    margin: 20px; /* Adds some space around each quadrant */
+    border-right: 2px solid #ccc;
+    min-width: 405px;
 }
 
 .menu-box {
@@ -89,28 +45,24 @@ html {
 #canvas {
     background-color: white;
     border: 2px solid gray;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Soft shadow */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 #result {
-    background-color: white;
     border: 1px solid gray;
 }
 
-#prediction-output {
+
+#prediction-container {
     font-size: 1.8rem;
-    width: 200px;
-    height: 82px;
-    text-align: center;
-    background-color: #f9f6f6; /* Soft gray background */
-    border: 1px solid #ccc; /* Light border */
-    border-radius: 10px; /* Rounded corners */
-    padding: 1rem;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Soft shadow */
-    transition: background-color 0.3s; /* Smooth transition for hover effect */
-    margin-right: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 5px;
   }
 
-  /* #prediction-output:hover {
-    background-color: #d0d0d0;
-  } */
+  #prediction-output {
+    text-align: center;
+  }
+
+  
